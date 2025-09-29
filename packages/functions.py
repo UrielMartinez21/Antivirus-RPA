@@ -63,24 +63,6 @@ def update_license_status(csv_path: str, license_key: str, new_status: str) -> b
         return False
 
 
-def get_license_with_status(csv_path: str) -> list:
-    """
-    Get all licenses with their current status from CSV.
-    
-    Args:
-        csv_path (str): Path to the CSV file
-    
-    Returns:
-        list: List of tuples (license_key, current_status)
-    """
-    try:
-        df = pd.read_csv(csv_path)
-        return list(zip(df['Licencias'].tolist(), df['Estatus'].tolist()))
-    except Exception as e:
-        print(f"❌ Error reading licenses with status: {str(e)}")
-        return []
-
-
 def get_pending_licenses(csv_path: str) -> list:
     """
     Get only licenses with 'Pendiente' status.
