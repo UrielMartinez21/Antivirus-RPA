@@ -35,6 +35,9 @@ class LicenseDataFormatter:
             
             df = df.rename(columns=column_mapping)
             
+            # Add the new 'estatus' column with default value
+            df['Estatus'] = 'Pendiente'
+            
             print(f"✅ Successfully read {len(df)} records from '{self.input_file}'")
             print(f"📊 Columns found: {list(df.columns)}")
             
@@ -54,7 +57,7 @@ class LicenseDataFormatter:
         Returns:
             bool: True if data is valid, False otherwise
         """
-        required_columns = ['Producto', 'Licencias', 'Vencimiento', 'Tipo']
+        required_columns = ['Producto', 'Licencias', 'Vencimiento', 'Tipo', 'Estatus']
         
         # Check if all required columns exist
         missing_columns = [col for col in required_columns if col not in df.columns]
@@ -118,6 +121,7 @@ class LicenseDataFormatter:
         print(f"Products: {df['Producto'].value_counts().to_dict()}")
         print(f"License types: {df['Tipo'].value_counts().to_dict()}")
         print(f"Expiration dates: {df['Vencimiento'].value_counts().to_dict()}")
+        print(f"Status: {df['Estatus'].value_counts().to_dict()}")
         
         # Show first few records
         print("\n🔍 Sample data:")

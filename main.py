@@ -1,6 +1,12 @@
 import time
 import pyautogui
-from packages.functions import open_eset_nod32, get_licenses, get_location, click_at_location
+from packages.functions import (
+    open_eset_nod32,
+    get_location,
+    click_at_location,
+    update_license_status,
+    get_pending_licenses,
+)
 from packages.pahts import (
     ACCEPT_ERROR,
     CHANGE_LICENSE,
@@ -15,10 +21,11 @@ from packages.pahts import (
 
 
 try:
-    # -> Get all licenses
-    licenses = get_licenses(LICENSES)
+    # -> Get pending licenses only
+    licenses = get_pending_licenses(LICENSES)
     if not licenses:
-        raise ValueError("No licenses found in the CSV file.")
+        print("ℹ️ No pending licenses found in the CSV file.")
+        exit(0)
 
     # -> Open ESET NOD32
     open_eset_nod32(ESET_NOD32)
@@ -33,6 +40,10 @@ try:
     click_at_location(change_subs, 1)
 
     for license_key in licenses:
+        # -> Update status to 'Procesando'
+        update_license_status(LICENSES, license_key, "Procesando")
+        print(f"🔄 Processing license: {license_key}")
+
         # -> Go to change license
         change_license = get_location(CHANGE_LICENSE)
         click_at_location(change_license, 1)
@@ -54,7 +65,15 @@ try:
         if error_message:
             accept_error = get_location(ACCEPT_ERROR)
             click_at_location(accept_error, 0)
+
+            # Update status to "Error" in CSV
+            update_license_status(LICENSES, license_key, "Error")
+            print(f"❌ License {license_key} failed - marked as Error")
             continue
+
+        # -> If no error, mark as successfully activated
+        update_license_status(LICENSES, license_key, "Activada")
+        print(f"✅ License {license_key} activated successfully")
 
 except Exception as e:
     print(f"[+] Error: {e}")
