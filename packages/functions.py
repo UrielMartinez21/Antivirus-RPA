@@ -13,7 +13,10 @@ def open_eset_nod32(path: str) -> None:
 
 
 def get_location(image_path: str, confidence: float = 0.85) -> tuple:
-    return pyautogui.locateCenterOnScreen(image_path, confidence=confidence)
+    try:
+        return pyautogui.locateCenterOnScreen(image_path, confidence=confidence)
+    except pyautogui.ImageNotFoundException:
+        return None
 
 
 def click_at_location(location: tuple, time_to_sleep: int) -> None:

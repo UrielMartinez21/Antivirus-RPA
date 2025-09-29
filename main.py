@@ -41,8 +41,6 @@ try:
 
     for license_key in licenses:
         # -> Update status to 'Procesando'
-        update_license_status(LICENSES, license_key, "Procesando")
-        print(f"🔄 Processing license: {license_key}")
 
         # -> Go to change license
         change_license = get_location(CHANGE_LICENSE)
@@ -61,19 +59,22 @@ try:
         click_at_location(continue_process, 10)
 
         # -> Check for error message
-        error_message = get_location(ERROR_MESSAGE)
-        if error_message:
-            accept_error = get_location(ACCEPT_ERROR)
-            click_at_location(accept_error, 0)
+        try:
+            error_message = get_location(ERROR_MESSAGE, confidence=0.8)
+            if error_message:
+                accept_error = get_location(ACCEPT_ERROR, confidence=0.8)
+                if accept_error:
+                    click_at_location(accept_error, 0)
 
-            # Update status to "Error" in CSV
-            update_license_status(LICENSES, license_key, "Error")
-            print(f"❌ License {license_key} failed - marked as Error")
-            continue
+                # Update status to "Error" in CSV
+                update_license_status(LICENSES, license_key, "Error")
+                print(f"❌ License {license_key} failed - marked as Error")
+                continue
+        except Exception:
+            pass
 
-        # -> If no error, mark as successfully activated
+        # -> If no error message found, license was activated successfully
         update_license_status(LICENSES, license_key, "Activada")
-        print(f"✅ License {license_key} activated successfully")
 
 except Exception as e:
     print(f"[+] Error: {e}")
