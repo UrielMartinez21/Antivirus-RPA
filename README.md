@@ -20,6 +20,7 @@ This tool automates the ESET NOD32 license changing process, allowing sequential
 antivirus/
 ├── main.py                   # Main execution file
 ├── requirements.txt          # Project dependencies
+├── format_data.py            # Format data
 ├── packages/
 │   ├── functions.py          # Main automation functions
 │   └── pahts.py              # Project paths and constants
