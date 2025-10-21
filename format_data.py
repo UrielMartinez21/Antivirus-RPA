@@ -39,9 +39,6 @@ class LicenseDataFormatter:
             # Add the new 'estatus' column with default value
             df["Estatus"] = "Pendiente"
 
-            print(f"✅ Successfully read {len(df)} records from '{self.input_file}'")
-            print(f"📊 Columns found: {list(df.columns)}")
-
             return df
 
         except Exception as e:
@@ -76,7 +73,6 @@ class LicenseDataFormatter:
         if empty_licenses > 0:
             print(f"⚠️  Warning: {empty_licenses} empty license entries found.")
 
-        print(f"✅ Data validation passed. {len(df)} valid records found.")
         return True
 
     def _save_to_csv(self, df: pd.DataFrame) -> bool:
@@ -98,9 +94,6 @@ class LicenseDataFormatter:
 
             # Save to CSV
             df.to_csv(self.output_file, index=False, encoding="utf-8")
-
-            print(f"✅ Successfully saved {len(df)} records to '{self.output_file}'")
-            print(f"📄 File size: {os.path.getsize(self.output_file)} bytes")
 
             return True
 
